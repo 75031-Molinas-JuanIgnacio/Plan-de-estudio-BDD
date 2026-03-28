@@ -400,6 +400,63 @@
     background: #444;
     transform: translateY(-1px);
   }
+
+  @media (max-width: 900px) {
+    .page {
+      padding: 16px;
+    }
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .col {
+      padding: 12px;
+    }
+    .nav-link {
+      margin: 12px 12px 0;
+    }
+  }
+
+  @media (max-width: 700px) {
+    body {
+      padding: 12px;
+    }
+    .page {
+      border-width: 1px;
+    }
+    .hdr {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .col {
+      padding: 10px;
+    }
+    .sec-title {
+      font-size: 7px;
+    }
+    .box,
+    .df-box,
+    .anom-item,
+    .p-item,
+    .table-mini {
+      font-size: 10px;
+    }
+    .table-mini {
+      width: 100%;
+    }
+    .bottom-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .nav-link a {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 </style>
 </head>
 <body>
