@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Estudio — Normalización BDD</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #16161a;
+    --border: #2a2a32;
+    --accent: #c8f76f;
+    --accent2: #ff6b6b;
+    --accent3: #6bd4ff;
+    --text: #e8e8ee;
+    --muted: #7a7a8c;
+    --card: #1c1c22;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(200,247,111,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #0e0e10;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+
+  h1 em {
+    font-style: italic;
+    font-family: 'Fraunces', serif;
+    color: var(--accent);
+    font-weight: 300;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .meta-value {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+  }
+
+  /* PARETO BOX */
+  .pareto-box {
+    margin: 40px 40px 0;
+    padding: 24px 28px;
+    background: linear-gradient(135deg, rgba(200,247,111,0.08), rgba(107,212,255,0.06));
+    border: 1px solid rgba(200,247,111,0.25);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .pareto-icon {
+    font-size: 36px;
+    flex-shrink: 0;
+  }
+
+  .pareto-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .pareto-text strong {
+    color: var(--accent);
+  }
+
+  /* SESSIONS GRID */
+  .sessions {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .session-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+
+  .session-card:hover {
+    border-color: rgba(200,247,111,0.4);
+    transform: translateY(-2px);
+  }
+
+  .session-header {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .session-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #0e0e10;
+    background: var(--accent);
+    padding: 10px 16px;
+    min-width: 80px;
+    text-align: center;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .session-num .ses-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+
+  .session-num .ses-n {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .session-title-area {
+    padding: 12px 20px;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .session-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .session-tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .tag-core { border-color: var(--accent); color: var(--accent); }
+  .tag-practice { border-color: var(--accent3); color: var(--accent3); }
+  .tag-deep { border-color: var(--accent2); color: var(--accent2); }
+
+  .session-body {
+    padding: 16px 20px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 700px) {
+    .session-body { grid-template-columns: 1fr; }
+  }
+
+  .session-col-title {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .session-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .session-col ul li {
+    font-size: 12px;
+    color: var(--text);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .session-col ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+  }
+
+  .review-box {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(200,247,111,0.06);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 2px 2px 0;
+    grid-column: 1 / -1;
+    font-size: 12px;
+    color: var(--text);
+  }
+
+  .review-box strong {
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* WEEK DIVIDERS */
+  .week-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0 4px;
+  }
+
+  .week-divider span {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .week-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* TIPS FOOTER */
+  .tips {
+    margin: 0 40px 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .tip-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+  }
+
+  .tip-icon { font-size: 24px; margin-bottom: 10px; }
+  .tip-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--accent3);
+  }
+  .tip-text { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* COLOR OVERRIDE per session */
+  .session-card:nth-child(1) .session-num { background: #c8f76f; }
+  .session-card:nth-child(2) .session-num { background: #a8e84d; }
+  .session-card:nth-child(3) .session-num { background: #6bd4ff; color: #0e0e10; }
+  .session-card:nth-child(4) .session-num { background: #4dbfff; color: #0e0e10; }
+  .session-card:nth-child(5) .session-num { background: #c8f76f; }
+  .session-card:nth-child(6) .session-num { background: #ff9f6b; color: #0e0e10; }
+  .session-card:nth-child(7) .session-num { background: #ff6b6b; }
+  .session-card:nth-child(8) .session-num { background: #ff6b6b; }
+  .session-card:nth-child(9) .session-num { background: #c8f76f; }
+  .session-card:nth-child(10) .session-num { background: #fff; color: #0e0e10; }
+
+  /* checkboxes */
+  .check-row {
+    display: flex; gap: 8px; align-items: center;
+    font-size: 12px; color: var(--muted);
+    padding: 10px 20px;
+    border-top: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .check-row input[type=checkbox] {
+    accent-color: var(--accent);
+    width: 14px; height: 14px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Base de Datos </div>
+  <h1>Plan de Estudio<br><em>Normalización</em></h1>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Horas totales</span>
+      <span class="meta-value">20 hs</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Sesiones</span>
+      <span class="meta-value">10</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Por sesión</span>
+      <span class="meta-value">2 hs</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Revisión</span>
+      <span class="meta-value">15 min</span>
+    </div>
+  </div>
+</header>
+
+<div class="pareto-box">
+  <div class="pareto-icon">⚡</div>
+  <div class="pareto-text">
+    <strong>Principio 80/20 aplicado:</strong> Este plan prioriza los 4 conceptos que aparecen en el 80% de los exámenes — 
+    <strong>Formas Normales (1FN→3FN)</strong>, <strong>Dependencias Funcionales</strong>, <strong>Claves PK/FK</strong> y los 
+    <strong>Principios de Diseño</strong>. BCNF, 4FN y 5FN se tratan superficialmente ya que raramente son evaluadas en profundidad.
+  </div>
+</div>
+
+<div class="sessions">
+  <p class="section-title">Sesiones de Estudio</p>
+
+  <!-- SEMANA 1 -->
+  <div class="week-divider"><span>Semana 1 — Fundamentos</span></div>
+
+  <!-- S1 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">01</span></div>
+      <div class="session-title-area">
+        <span class="session-title">¿Qué es una Base de Datos Relacional?</span>
+        <span class="session-tag tag-core">Fundamento</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📚 Contenido (75 min)</p>
+        <ul>
+          <li>Concepto de BD: colección interrelacionada sin redundancias</li>
+          <li>Modelo Relacional: relación = tabla</li>
+          <li>Tupla, atributo, dominio, cardinalidad, grado</li>
+          <li>Propiedades: sin orden, valores atómicos</li>
+          <li>Integridad de entidad e integridad referencial</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🔧 Práctica (30 min)</p>
+        <ul>
+          <li>Leer los documentos "Resumen_1_Parcial_BDD" pp. 1-4</li>
+          <li>Dibujar a mano una tabla con todos sus componentes etiquetados</li>
+          <li>Identificar PK en 3 tablas de ejemplo</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Recurso clave</p>
+        <ul>
+          <li>Resumen_1_Parcial_BDD pp. 17-20</li>
+          <li>GDA_Resumen_Completo pp. 1-3</li>
+          <li>Tabla equivalencias: Relación↔Tabla, Tupla↔Fila, Atributo↔Columna</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Sin mirar notas: definir con propias palabras — ¿qué es una tupla? ¿qué es dominio? ¿cuándo la PK puede ser NULL? (Respuesta: NUNCA). Escribir la regla de integridad referencial con un ejemplo.
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- S2 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">02</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Claves: PK, FK, Candidatas y Alternativas</span>
+        <span class="session-tag tag-core">Fundamento</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📚 Contenido (75 min)</p>
+        <ul>
+          <li>Clave Primaria: unicidad + minimalidad</li>
+          <li>Clave Natural vs. Artificial (secuencia numérica)</li>
+          <li>Cuándo usar PK natural: ofrece control de integridad</li>
+          <li>Clave Foránea: concordancia referencial</li>
+          <li>Reglas FK: ¿acepta NULL? ¿Qué pasa al borrar? (RESTRINGIR / PROPAGAR / ANULAR)</li>
+          <li>Claves candidatas y alternativas</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🔧 Práctica (30 min)</p>
+        <ul>
+          <li>Crear modelo ESTUDIANTES con PK natural (tipo+nro documento)</li>
+          <li>Crear entidad CARRERAS y enlazar con FK desde ESTUDIANTES</li>
+          <li>Identificar 2 claves candidatas en una relación de ejemplo</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Recurso clave</p>
+        <ul>
+          <li>PRINCIPIOS_BUENAS_PRACTICAS pp. 12-14</li>
+          <li>GDA_Resumen pp. 1-2 (Propiedades claves candidatas)</li>
+          <li>Principio: "si 2 entidades tienen la misma PK → probablemente son una sola"</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Flashcard mental: ¿Qué diferencia una clave natural de una artificial? ¿Cuándo DEBO usar artificial? Responder: ¿puede una FK referenciar a su propia tabla?
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- S3 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">03</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Dependencias Funcionales (DF) — El Corazón de la Normalización</span>
+        <span class="session-tag tag-core">Fundamento</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📚 Contenido (75 min)</p>
+        <ul>
+          <li>DF: A → B significa "A determina a B"</li>
+          <li>Determinante: lado izquierdo de la flecha</li>
+          <li>DF Completa vs. DF Parcial</li>
+          <li>DF Transitiva: A→B y B→C ⟹ A→C (problema para 3FN)</li>
+          <li>Anomalías de inserción, borrado y modificación</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🔧 Práctica (30 min)</p>
+        <ul>
+          <li>Dado: FACTURA(nro_fac, fecha, cod_cli, nom_cli, cod_art, desc_art, precio, cant)</li>
+          <li>Identificar TODAS las DF existentes</li>
+          <li>Marcar cuáles son parciales y cuáles transitivas</li>
+          <li>Describir qué anomalía ocurriría si borras la única factura de un cliente</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Recurso clave</p>
+        <ul>
+          <li>GDA_Resumen pp. 2-3 (Dependencia Funcional)</li>
+          <li>Clave: "B depende de A si cada valor de A tiene exactamente 1 valor de B"</li>
+          <li>Ejemplo: NroEmpl → EmpNombre</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Sin notas: escribir la definición de DF. Luego identificar en la relación EmpleadoSucursal (vista en clase) cuál atributo causa anomalía de modificación y por qué.
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- SEMANA 2 -->
+  <div class="week-divider"><span>Semana 2 — Formas Normales</span></div>
+
+  <!-- S4 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">04</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Primera y Segunda Forma Normal (1FN → 2FN)</span>
+        <span class="session-tag tag-core">★ Alta prioridad</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📚 Contenido (75 min)</p>
+        <ul>
+          <li>1FN: cada celda = un solo valor atómico, sin grupos repetidos</li>
+          <li>Violación 1FN: campos multivalor (ej. "teléfonos: 123,456")</li>
+          <li>2FN: en 1FN + todos los atributos NO clave dependen de TODA la PK</li>
+          <li>2FN solo importa cuando la PK es compuesta</li>
+          <li>Proceso: detectar DF parcial → extraer a nueva tabla</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🔧 Práctica (30 min)</p>
+        <ul>
+          <li>Normalizar a 1FN: tabla con teléfonos múltiples en una celda</li>
+          <li>Normalizar a 2FN la relación DETALLE_FACTURA con PK compuesta (nro_fac + cod_art) donde desc_art depende solo de cod_art</li>
+          <li>Verificar: ¿está en 2FN si la PK es simple? (siempre sí)</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Recurso clave</p>
+        <ul>
+          <li>GDA_Resumen p. 3 (1FN, 2FN)</li>
+          <li>Ejemplo normalización factura → CLIENTES, ARTICULOS, FACTURA, ITEM_FACTURA</li>
+          <li>Regla rápida: "¿Existe algún atributo no-clave que dependa solo de PARTE de la PK compuesta?"</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Pregunta de examen frecuente: "¿Puede una relación con PK simple violar la 2FN?" Responder y justificar. Dibujar el proceso 1FN→2FN con la factura del ejemplo.
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- S5 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">05</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Tercera Forma Normal y BCNF</span>
+        <span class="session-tag tag-core">★ Alta prioridad</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📚 Contenido (75 min)</p>
+        <ul>
+          <li>3FN: en 2FN + ningún atributo no-clave depende transitivamente de la PK</li>
+          <li>DF Transitiva: PK→A y A→B ⟹ extraer A y B a nueva tabla</li>
+          <li>BCNF: todo determinante debe ser clave candidata</li>
+          <li>Diferencia 3FN vs BCNF: BCNF más estricta, para múltiples claves candidatas</li>
+          <li>Cuándo usar cada una</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🔧 Práctica (30 min)</p>
+        <ul>
+          <li>Identificar y eliminar la DF(Dependencia Funcional) transitiva en EMPLEADO_SUCURSAL</li>
+          <li>Verificar 3FN en las tablas de la sesión anterior</li>
+          <li>Ejercicio BCNF: relación donde un no-clave determina a otro no-clave</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Recurso clave</p>
+        <ul>
+          <li>GDA_Resumen p. 3 (3FN, BCNF)</li>
+          <li>Caso clásico: NroSuc → DirSuc (transitiva desde NroEmpl→NroSuc→DirSuc)</li>
+          <li>Solución: tabla SUCURSAL(NroSuc, DirSuc) separada</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Completar de memoria el proceso completo: EMPLEADO_SUCURSAL sin normalizar → 1FN → 2FN → 3FN. Cada paso con la tabla resultante dibujada a mano.
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- S6 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">06</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Principios de Diseño: Elocuencia y Clasificaciones</span>
+        <span class="session-tag tag-practice">Diseño</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📚 Contenido (60 min)</p>
+        <ul>
+          <li>Principio de Entendimiento: entender ≠ interpretar</li>
+          <li>Correcta Dimensión: ni entidades de más ni de menos</li>
+          <li>Principio de Elocuencia: nombres completos, sin abreviaturas</li>
+          <li>Nombre de Dominio Explícito: fecha_nacimiento &gt; fecha1 &gt; f_nac</li>
+          <li>Clasificaciones Contenidas: tablas de referencia para catálogos</li>
+          <li>Atributo de Valor Repetitivo: texto repetido → tabla de referencia</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🔧 Práctica (45 min)</p>
+        <ul>
+          <li>Rediseñar tabla EST1 (con abreviaturas) como ESTUDIANTES (elocuente)</li>
+          <li>Convertir campo "sexo" con valores M/F a tabla SEXOS con FK</li>
+          <li>Convertir campo "barrio" repetido a tabla BARRIOS con FK</li>
+          <li>Crear tabla TIPOS_DOCUMENTO para clasificar documentos</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Recurso clave</p>
+        <ul>
+          <li>PRINCIPIOS_BUENAS_PRACTICAS pp. 5-11</li>
+          <li>Regla: "todo campo texto con 2+ valores repetidos → tabla de referencia"</li>
+          <li>Excepción: apellidos y nombres no se clasifican en tablas de referencia</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Dado un modelo con campos: profesion, ciudad, tipo_contrato — determinar cuáles deberían tener tabla de referencia y cuáles no. Justificar cada decisión usando los principios.
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- SEMANA 3 -->
+  <div class="week-divider"><span>Semana 3 — Práctica Intensiva</span></div>
+
+  <!-- S7 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">07</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Caso Completo: Normalización de Punta a Punta</span>
+        <span class="session-tag tag-practice">Práctica total</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📚 Contenido (30 min)</p>
+        <ul>
+          <li>Repaso metodología completa: analizar → identificar DF → normalizar paso a paso</li>
+          <li>Análisis de relaciones: 1→N, N→1, N→N → cómo se resuelve cada una</li>
+          <li>Relación N→N siempre genera tabla intermedia</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🔧 Práctica (90 min)</p>
+        <ul>
+          <li>Ejercicio completo con texto: "Sistema de Congreso Científico"</li>
+          <li>Extraer entidades del texto, identificar atributos</li>
+          <li>Aplicar 1FN, 2FN, 3FN con cada tabla</li>
+          <li>Aplicar principios de diseño (elocuencia, clasificaciones)</li>
+          <li>Verificar que el modelo satisface todo lo documentado</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Recurso clave</p>
+        <ul>
+          <li>PRINCIPIOS_BUENAS_PRACTICAS pp. 24-25 (Pertenencia Natural)</li>
+          <li>Ejemplo ARTICULOS_ENVIADOS + AUTORES_X_ARTICULO</li>
+          <li>GDA_Resumen p. 4 (Ejemplo factura normalizada)</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Chequeo de calidad del modelo: ¿tiene nombres elocuentes? ¿todas las clasificaciones están en tablas de referencia? ¿alguna entidad con la misma PK que otra? ¿atributos calculables innecesarios?
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- S8 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">08</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Errores Comunes + Principios Avanzados de Diseño</span>
+        <span class="session-tag tag-deep">Profundidad</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📚 Contenido (60 min)</p>
+        <ul>
+          <li>Igualdad de PK entre dos entidades: señal de error o fusión necesaria</li>
+          <li>Relación 1:1 → posible fusión en una sola entidad</li>
+          <li>Igualdad estructural: ESTUDIANTES + DOCENTES → PERSONAS + TIPOS_FUNCIONES</li>
+          <li>Pertenencia natural del atributo: ¿dónde tiene menos costo de recuperación?</li>
+          <li>Dicotomía de atributos calculables: guardar total_factura sí o no</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🔧 Práctica (60 min)</p>
+        <ul>
+          <li>Analizar modelo con ESTUDIANTES y DOMICILIOS con misma PK → decidir si fusionar</li>
+          <li>Ejercicio: ¿guardar precio_total en DETALLE_FACTURA?</li>
+          <li>Detectar y corregir 5 errores en un modelo dado con problemas</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Recurso clave</p>
+        <ul>
+          <li>PRINCIPIOS_BUENAS_PRACTICAS pp. 15-27</li>
+          <li>Regla de oro: "evitar redundancia, pero no eliminar sin análisis previo"</li>
+          <li>Consigna de la cátedra: atributos calculables → analizar caso por caso</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Lista de verificación de 10 puntos: repasar cada principio visto y marcarlo como "entendido / necesito repaso". Programar repaso de los que necesiten más trabajo.
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- SEMANA 4 -->
+  <div class="week-divider"><span>Semana 4 — Consolidación y Repaso Final</span></div>
+
+  <!-- S9 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">09</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Simulacro de Parcial Completo</span>
+        <span class="session-tag tag-practice">Examen simulado</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">📋 Modalidad (120 min)</p>
+        <ul>
+          <li>Cerrar todos los apuntes — condiciones reales</li>
+          <li>60 min: ejercicio de normalización con enunciado largo</li>
+          <li>30 min: preguntas teóricas (definir DF, 3FN, principios)</li>
+          <li>30 min: corrección propia usando los documentos</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🎯 Preguntas típicas de parcial</p>
+        <ul>
+          <li>Normalizar una relación desnormalizada dada</li>
+          <li>Identificar en qué FN se encuentra una relación</li>
+          <li>Detectar anomalías en una tabla</li>
+          <li>Justificar por qué un diseño viola un principio</li>
+          <li>Diferencia entre 2FN y 3FN con ejemplo</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">📌 Corrección</p>
+        <ul>
+          <li>Verificar cada paso: ¿está en 1FN primero?</li>
+          <li>¿Todas las DF están identificadas antes de normalizar?</li>
+          <li>¿Los nombres son elocuentes?</li>
+          <li>¿Las tablas de referencia están creadas?</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión 15 min</strong>
+        Identificar los 3 puntos donde cometiste errores en el simulacro. Anotarlos. Esos son tus puntos de repaso para la sesión 10.
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+  <!-- S10 -->
+  <div class="session-card">
+    <div class="session-header">
+      <div class="session-num"><span class="ses-label">SES</span><span class="ses-n">10</span></div>
+      <div class="session-title-area">
+        <span class="session-title">Repaso Focalizado + Consolidación Final</span>
+        <span class="session-tag tag-deep">Cierre</span>
+      </div>
+    </div>
+    <div class="session-body">
+      <div class="session-col">
+        <p class="session-col-title">🔁 Repaso (60 min)</p>
+        <ul>
+          <li>Repasar los errores detectados en sesión 9</li>
+          <li>Hacer 3 ejercicios cortos de los temas con más fallas</li>
+          <li>Releer el resumen de 1 página (documento adjunto)</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">🧠 Active Recall (30 min)</p>
+        <ul>
+          <li>Sin notas: enumerar todos los principios de diseño</li>
+          <li>Sin notas: describir el proceso 1FN→2FN→3FN</li>
+          <li>Sin notas: dar un ejemplo de DF transitiva y cómo resolverla</li>
+          <li>Sin notas: ¿cuándo se usa PK artificial obligatoriamente?</li>
+        </ul>
+      </div>
+      <div class="session-col">
+        <p class="session-col-title">✅ Checklist Final (30 min)</p>
+        <ul>
+          <li>¿Puedo normalizar una relación de 0 a 3FN sin ayuda?</li>
+          <li>¿Puedo identificar todos los tipos de anomalías?</li>
+          <li>¿Puedo explicar cada principio de diseño con ejemplo?</li>
+          <li>¿Conozco las reglas de PK y FK de memoria?</li>
+        </ul>
+      </div>
+      <div class="review-box">
+        <strong>⏱ Revisión Final 15 min</strong>
+        Leer el resumen de 1 página por última vez. Estás listo. El 80% del parcial está cubierto por lo que trabajaste en estas 20 horas.
+      </div>
+    </div>
+    <div class="check-row"><input type="checkbox"> Sesión completada</div>
+  </div>
+
+</div>
+
+<!-- TIPS -->
+<div class="tips">
+  <div class="tip-card">
+    <div class="tip-icon">🧠</div>
+    <div class="tip-title">Active Recall</div>
+    <div class="tip-text">Cerrar el apunte y escribir de memoria lo que recordás. Es 2× más efectivo que releer. Usalo en la revisión de 15 min de cada sesión.</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-icon">📝</div>
+    <div class="tip-title">Dibujá, no copies</div>
+    <div class="tip-text">Para normalización, dibujar las tablas a mano activa la memoria espacial. Cada ejercicio: primero dibujá la relación desnormalizada, luego el resultado.</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-icon">⚡</div>
+    <div class="tip-title">Regla de las 48 horas</div>
+    <div class="tip-text">Si no repassás en 48 horas, olvidás el 70%. Cada sesión incluye revisión de la anterior. No salteés la revisión de 15 min.</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-icon">🎯</div>
+    <div class="tip-title">Prioridad absoluta</div>
+    <div class="tip-text">Si el tiempo es poco: S3+S4+S5 son las sesiones más críticas para el parcial. Dependencias Funcionales y 1FN→3FN son el 60% del examen.</div>
+  </div>
+</div>
+
+</body>
+</html>
