@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumen Normalización — 1 Página</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Unbounded:wght@600;900&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f6;
+    --text: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #d4d0c8;
+    --accent: #1a1a1a;
+    --green: #1a5c2a;
+    --green-bg: #e8f5eb;
+    --red: #8b1a1a;
+    --red-bg: #f5e8e8;
+    --blue: #1a2e5c;
+    --blue-bg: #e8ecf5;
+    --yellow: #5c4a1a;
+    --yellow-bg: #f5f0e0;
+    --orange: #8b3a1a;
+    --orange-bg: #f5ece8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border: 2px solid var(--text);
+    box-shadow: 6px 6px 0 var(--text);
+  }
+
+  /* HEADER */
+  .hdr {
+    background: var(--text);
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hdr-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+
+  .hdr-sub {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-top: 2px;
+  }
+
+  .hdr-badge {
+    background: #c8f76f;
+    color: #1a1a1a;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 4px 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* MAIN GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 2px solid var(--text);
+  }
+
+  .col {
+    padding: 14px;
+    border-right: 1px solid var(--border);
+  }
+  .col:last-child { border-right: none; }
+
+  /* SECTION TITLES */
+  .sec-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: white;
+    background: var(--text);
+    display: inline-block;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+  }
+
+  /* BOXES */
+  .box {
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    border-left: 3px solid;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .box-green { background: var(--green-bg); border-color: var(--green); }
+  .box-red { background: var(--red-bg); border-color: var(--red); }
+  .box-blue { background: var(--blue-bg); border-color: var(--blue); }
+  .box-yellow { background: var(--yellow-bg); border-color: var(--yellow); }
+  .box-orange { background: var(--orange-bg); border-color: var(--orange); }
+  .box-dark { background: #f0f0f0; border-color: var(--text); }
+
+  .box-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .box-green .box-title { color: var(--green); }
+  .box-red .box-title { color: var(--red); }
+  .box-blue .box-title { color: var(--blue); }
+  .box-yellow .box-title { color: var(--yellow); }
+  .box-orange .box-title { color: var(--orange); }
+  .box-dark .box-title { color: var(--text); }
+
+  ul.items {
+    list-style: none;
+  }
+  ul.items li {
+    padding-left: 12px;
+    position: relative;
+    margin-bottom: 2px;
+    font-size: 10.5px;
+  }
+  ul.items li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    font-size: 8px;
+    top: 2px;
+  }
+
+  .box-green ul.items li::before { color: var(--green); }
+  .box-red ul.items li::before { color: var(--red); }
+  .box-blue ul.items li::before { color: var(--blue); }
+  .box-yellow ul.items li::before { color: var(--yellow); }
+  .box-orange ul.items li::before { color: var(--orange); }
+  .box-dark ul.items li::before { color: var(--text); }
+
+  em.code {
+    font-style: normal;
+    font-family: 'IBM Plex Mono', monospace;
+    background: rgba(0,0,0,0.08);
+    padding: 0 3px;
+    border-radius: 2px;
+    font-size: 10px;
+  }
+
+  /* FN PROCESS DIAGRAM */
+  .fn-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .fn-step {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .fn-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    background: var(--text);
+    color: white;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .fn-content {
+    flex: 1;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    font-size: 10px;
+  }
+
+  .fn-arrow {
+    text-align: center;
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1;
+    padding: 2px 0;
+  }
+
+  .fn-label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .fn-cond {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .fn-check {
+    font-size: 9px;
+    background: var(--yellow-bg);
+    color: var(--yellow);
+    padding: 1px 4px;
+    display: inline-block;
+    margin-top: 2px;
+    border-radius: 1px;
+  }
+
+  /* DF example */
+  .df-box {
+    background: var(--text);
+    color: white;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  .df-formula {
+    font-size: 13px;
+    text-align: center;
+    padding: 6px 0;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    margin: 6px 0;
+    letter-spacing: 2px;
+  }
+
+  /* FULL WIDTH SECTION */
+  .full-row {
+    border-top: 2px solid var(--text);
+    padding: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* ANOMALÍAS */
+  .anom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .anom-item {
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    background: #fafafa;
+  }
+  .anom-label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 7px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 3px;
+  }
+  .anom-text { font-size: 9.5px; color: var(--muted); }
+
+  /* BOTTOM BAR */
+  .bottom-bar {
+    margin-top: 16px;
+    background: var(--text);
+    color: white;
+    padding: 8px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    letter-spacing: 1px;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-top: 2px solid var(--text);
+  }
+
+  .golden-rule {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: #c8f76f;
+  }
+
+  /* DIAGRAM */
+  .diagram-col {
+    grid-column: span 3;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  .table-mini {
+    display: inline-grid;
+    border: 1px solid var(--text);
+    font-size: 9px;
+    margin: 4px 2px;
+    vertical-align: top;
+  }
+  .table-mini-header {
+    background: var(--text);
+    color: white;
+    padding: 2px 8px;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+  }
+  .table-mini-body { padding: 4px 8px; }
+  .table-mini-body div {
+    padding: 1px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .table-mini-body div:last-child { border-bottom: none; }
+  .pk { font-weight: 600; color: var(--green); }
+  .fk { color: var(--blue); }
+
+  .arrow-right {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 16px;
+    margin: 0 4px;
+    color: var(--muted);
+    position: relative;
+    top: -10px;
+  }
+
+  .principle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+
+  .p-item {
+    padding: 5px 7px;
+    background: #f9f9f9;
+    border: 1px solid var(--border);
+    font-size: 9.5px;
+  }
+
+  .p-item strong {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 7.5px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .nav-link {
+    margin: 16px 14px 0;
+  }
+
+  .nav-link a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    background: var(--text);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .nav-link a:hover {
+    background: #444;
+    transform: translateY(-1px);
+  }
+</style>
+</head>
+<body>
+<div class="page" id="resumen">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div>
+      <div class="hdr-title">Normalización BDD</div>
+      <div class="hdr-sub">Base de Datos · Resumen 1 página</div>
+    </div>
+    <div class="hdr-badge">Revisión 5 min</div>
+  </div>
+
+  <!-- MAIN 3-COLUMN GRID -->
+  <div class="grid">
+
+    <!-- COL 1: FUNDAMENTOS + DF -->
+    <div class="col">
+      <div class="sec-title">Fundamentos</div>
+
+      <div class="box box-dark">
+        <div class="box-title">Equivalencias clave</div>
+        <ul class="items">
+          <li>Relación = <em class="code">TABLA</em></li>
+          <li>Tupla = <em class="code">FILA</em></li>
+          <li>Atributo = <em class="code">COLUMNA</em></li>
+          <li>Cardinalidad = nro. de filas</li>
+          <li>Grado = nro. de columnas</li>
+          <li>Dominio = tipo de dato (conjunto atómico)</li>
+        </ul>
+      </div>
+
+      <div class="box box-green">
+        <div class="box-title">Reglas de Claves</div>
+        <ul class="items">
+          <li><strong>PK:</strong> unicidad + minimalidad</li>
+          <li><strong>PK nunca puede ser NULL</strong> (integridad de entidad)</li>
+          <li>Natural: usa datos reales del dominio</li>
+          <li>Artificial: secuencia numérica (ID)</li>
+          <li>Usar artificial solo cuando no hay opción</li>
+          <li><strong>FK:</strong> debe concordar con PK referenciada</li>
+          <li>FK puede ser NULL o valor válido</li>
+          <li>FK puede referenciar la misma tabla</li>
+        </ul>
+      </div>
+
+      <div class="df-box">
+        <div style="font-family:'Unbounded',sans-serif;font-size:8px;font-weight:600;letter-spacing:2px;opacity:0.6;margin-bottom:4px;">DEPENDENCIA FUNCIONAL</div>
+        <div class="df-formula">A → B</div>
+        <div style="font-size:10px;margin-top:6px;">Cada valor de <strong>A</strong> tiene exactamente 1 valor de <strong>B</strong>.<br>A = determinante | B = dependiente</div>
+        <div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.2);">
+          <div style="font-size:9px;opacity:0.7;margin-bottom:3px;">EJEMPLOS:</div>
+          <div style="font-size:10px;">NroEmpl → Nombre</div>
+          <div style="font-size:10px;">NroEmpl → NroSuc → DirSuc (TRANSITIVA ⚠️)</div>
+        </div>
+      </div>
+
+      <div class="box box-red">
+        <div class="box-title">Tipos de DF a detectar</div>
+        <ul class="items">
+          <li><strong>DF Completa:</strong> B depende de TODO A (PK compuesta)</li>
+          <li><strong>DF Parcial:</strong> B depende solo de PARTE de la PK → viola 2FN</li>
+          <li><strong>DF Transitiva:</strong> A→B y B→C → viola 3FN</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- COL 2: FORMAS NORMALES -->
+    <div class="col">
+      <div class="sec-title">Formas Normales</div>
+
+      <div class="fn-flow">
+
+        <div class="fn-step">
+          <div class="fn-num">SN</div>
+          <div class="fn-content">
+            <div class="fn-label">Sin Normalizar</div>
+            <div class="fn-cond">Datos mezclados, redundancia, anomalías</div>
+          </div>
+        </div>
+
+        <div class="fn-arrow">⬇ aplicar 1FN</div>
+
+        <div class="fn-step">
+          <div class="fn-num">1</div>
+          <div class="fn-content">
+            <div class="fn-label">1FN — Dominios Simples</div>
+            <div class="fn-cond">✓ Cada celda tiene UN SOLO valor atómico<br>✓ No hay grupos repetidos ni listas</div>
+            <div class="fn-check">Violación: "tel: 123, 456" en una celda</div>
+          </div>
+        </div>
+
+        <div class="fn-arrow">⬇ aplicar 2FN</div>
+
+        <div class="fn-step">
+          <div class="fn-num">2</div>
+          <div class="fn-content">
+            <div class="fn-label">2FN — Sin DF Parciales</div>
+            <div class="fn-cond">✓ En 1FN<br>✓ Todos los attr. no-clave dependen de TODA la PK<br>✓ Solo importa si PK es compuesta</div>
+            <div class="fn-check">Violación: desc_art depende solo de cod_art (no de toda la PK)</div>
+          </div>
+        </div>
+
+        <div class="fn-arrow">⬇ aplicar 3FN</div>
+
+        <div class="fn-step">
+          <div class="fn-num">3</div>
+          <div class="fn-content">
+            <div class="fn-label">3FN — Sin DF Transitivas</div>
+            <div class="fn-cond">✓ En 2FN<br>✓ Ningún attr. no-clave depende transitivamente de la PK</div>
+            <div class="fn-check">Violación: NroEmpl→NroSuc→DirSuc</div>
+          </div>
+        </div>
+
+        <div class="fn-arrow">⬇ (opcional)</div>
+
+        <div class="fn-step">
+          <div class="fn-num" style="background:#555;">B</div>
+          <div class="fn-content">
+            <div class="fn-label">BCNF — Todo determinante es clave candidata</div>
+            <div class="fn-cond">Más estricta que 3FN. Solo para relaciones con múltiples claves candidatas compuestas con atributo común.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Anomalías -->
+      <div style="margin-top:4px;">
+        <div class="sec-title">Anomalías (problema de NO normalizar)</div>
+        <div class="anom-grid">
+          <div class="anom-item">
+            <div class="anom-label">Inserción</div>
+            <div class="anom-text">Para agregar nueva sucursal sin empleados → NULL en PK (ILEGAL)</div>
+          </div>
+          <div class="anom-item">
+            <div class="anom-label">Borrado</div>
+            <div class="anom-text">Borrar el último empleado de una sucursal → perdés datos de la sucursal</div>
+          </div>
+          <div class="anom-item">
+            <div class="anom-label">Modificación</div>
+            <div class="anom-text">Cambiar dirección de sucursal → hay que actualizarlo en TODAS las filas</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COL 3: PRINCIPIOS DE DISEÑO -->
+    <div class="col">
+      <div class="sec-title">Principios de Diseño</div>
+
+      <div class="principle-grid">
+
+        <div class="p-item">
+          <strong>Entendimiento del Problema</strong>
+          Entender ≠ Interpretar. El documento manda. Sin supuestos extra.
+        </div>
+
+        <div class="p-item">
+          <strong>Correcta Dimensión</strong>
+          Ni entidades de más (sin doc.) ni de menos (que falten). Solución acotada.
+        </div>
+
+        <div class="p-item">
+          <strong>Elocuencia</strong>
+          <em class="code">ESTUDIANTES</em> &gt; <em class="code">EST1</em>. Si alguien más puede leerlo sin explicación, es elocuente.
+        </div>
+
+        <div class="p-item">
+          <strong>Nombre Explícito</strong>
+          <em class="code">fecha_nacimiento</em> &gt; <em class="code">fecha1</em> &gt; <em class="code">f_nac</em>. Cuanto más detallado, mejor.
+        </div>
+
+        <div class="p-item">
+          <strong>Clasificaciones Contenidas</strong>
+          Valores de tipo: sexo, tipo_doc → tabla de referencia. El modelo se explica solo.
+        </div>
+
+        <div class="p-item">
+          <strong>PK Natural</strong>
+          Usar atributos reales del dominio. Control de integridad que las artificiales no dan.
+        </div>
+
+        <div class="p-item">
+          <strong>PK Artificial</strong>
+          Cuando no hay opción (ej: tabla SEXOS — no hay clave natural obvia).
+        </div>
+
+        <div class="p-item">
+          <strong>Misma PK = ¿misma entidad?</strong>
+          Si 2 entidades tienen misma PK → posible fusión. Relación 1:1 = probable error.
+        </div>
+
+        <div class="p-item">
+          <strong>Valor Repetitivo</strong>
+          Texto con 2+ valores que se repite sistemáticamente → tabla de referencia (excepto apellidos/nombres).
+        </div>
+
+        <div class="p-item">
+          <strong>Igualdad Estructural</strong>
+          ESTUDIANTES y DOCENTES con misma estructura → PERSONAS + TIPOS_FUNCIONES (opcional, no obligatorio).
+        </div>
+
+        <div class="p-item">
+          <strong>Pertenencia Natural</strong>
+          Atributo va donde produce menos esfuerzo de recuperación y mantenimiento.
+        </div>
+
+        <div class="p-item">
+          <strong>Atrib. Calculables</strong>
+          Evitar redundancia, pero analizar antes de eliminar. Considerar costo de recalcular.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div><!-- end grid -->
+
+  <!-- BOTTOM FULL ROW: EJEMPLO VISUAL -->
+  <div style="border-top:2px solid var(--text);padding:14px;background:#fafaf8;">
+    <div class="sec-title" style="margin-bottom:10px;">Ejemplo Rápido: Factura sin normalizar → 3FN</div>
+    <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:4px;font-size:10px;">
+
+      <div class="table-mini">
+        <div class="table-mini-header">FACTURA_SN (sin normalizar)</div>
+        <div class="table-mini-body">
+          <div><span class="pk">nro_factura</span> · <span class="pk">cod_articulo</span></div>
+          <div>fecha · <em style="color:#8b3a1a">cod_cliente · nom_cliente</em></div>
+          <div><em style="color:#8b3a1a">desc_articulo · precio</em></div>
+          <div>cantidad · monto_total</div>
+        </div>
+      </div>
+
+      <div class="arrow-right">→</div>
+
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div class="table-mini">
+          <div class="table-mini-header">CLIENTES</div>
+          <div class="table-mini-body">
+            <div><span class="pk">cod_cliente</span></div>
+            <div>nombre_cliente</div>
+          </div>
+        </div>
+        <div class="table-mini">
+          <div class="table-mini-header">ARTICULOS</div>
+          <div class="table-mini-body">
+            <div><span class="pk">cod_articulo</span></div>
+            <div>descripcion</div>
+            <div>precio</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-right">+</div>
+
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div class="table-mini">
+          <div class="table-mini-header">FACTURAS</div>
+          <div class="table-mini-body">
+            <div><span class="pk">nro_factura</span></div>
+            <div>fecha</div>
+            <div><span class="fk">cod_cliente FK</span></div>
+          </div>
+        </div>
+        <div class="table-mini">
+          <div class="table-mini-header">ITEMS_FACTURA</div>
+          <div class="table-mini-body">
+            <div><span class="pk">nro_factura FK</span></div>
+            <div><span class="pk">cod_articulo FK</span></div>
+            <div>cantidad</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-left:16px;padding:10px;background:#e8f5eb;border-left:3px solid #1a5c2a;flex:1;min-width:180px;">
+        <div style="font-family:'Unbounded',sans-serif;font-size:8px;font-weight:600;color:#1a5c2a;margin-bottom:6px;">QUÉ SE ELIMINÓ</div>
+        <div style="color:#1a5c2a;font-size:9.5px;line-height:1.7;">
+          ✓ DF Parcial: desc/precio dependían solo de cod_art<br>
+          ✓ DF Transitiva: nro_fac→cod_cli→nom_cli<br>
+          ✓ Anomalía inserción: nuevo cliente sin factura<br>
+          ✓ Redundancia: nom_cliente repetido por factura
+        </div>
+      </div>
+
+      <div style="margin-left:8px;padding:10px;background:#f5ece8;border-left:3px solid #8b3a1a;flex:1;min-width:160px;">
+        <div style="font-family:'Unbounded',sans-serif;font-size:8px;font-weight:600;color:#8b3a1a;margin-bottom:6px;">CHECKLIST ANTES DE ENTREGAR</div>
+        <div style="font-size:9.5px;line-height:1.7;color:#5c2a1a;">
+          □ ¿Nombres elocuentes?<br>
+          □ ¿Clasificaciones en tablas referencia?<br>
+          □ ¿PK bien definida (no NULL)?<br>
+          □ ¿FK con concordancia referencial?<br>
+          □ ¿Ningún atributo repetido sin tabla?<br>
+          □ ¿Alguna PK igual entre 2 entidades?
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-link">
+    <a href="index.html">Plan de estudio</a>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="golden-rule">"Evitar la redundancia, pero no eliminar sin análisis previo"</div>
+    <div style="opacity:0.6;font-size:9px;">Normalización · Base de Datos</div>
+  </div>
+
+</div>
+</body>
+</html>

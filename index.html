@@ -365,6 +365,31 @@
     accent-color: var(--accent);
     width: 14px; height: 14px; cursor: pointer;
   }
+
+  .nav-link {
+    margin: 0 40px 24px;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    gap: 8px;
+    background: var(--accent);
+    color: #0e0e10;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .cta-button:hover {
+    background: rgba(200,247,111,0.9);
+    border-color: rgba(200,247,111,0.8);
+    transform: translateY(-1px);
+  }
 </style>
 </head>
 <body>
@@ -862,6 +887,10 @@
     <div class="check-row"><input type="checkbox"> Sesión completada</div>
   </div>
 
+</div>
+
+<div class="nav-link">
+  <a class="cta-button" href="resumen_normalizacion_1pag.html#resumen">Hacks para normalizar</a>
 </div>
 
 <!-- TIPS -->
